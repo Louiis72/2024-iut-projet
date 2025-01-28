@@ -15,8 +15,8 @@ class FamilyController(val familyServices: FamilyServices) {
     }
 
     @GetMapping("/api/v1/families")
-    fun getFamilies() : List<String> {
-        TODO()
+    fun finAllFamilies() : List<FamilyDto> {
+        return familyServices.getFamilies()
     }
 
     @GetMapping("/api/v1/families/{id}")
