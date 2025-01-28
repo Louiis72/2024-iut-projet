@@ -3,6 +3,7 @@ package iut.nantes.project.products.entities
 import jakarta.persistence.*
 import java.util.*
 
+@Table(name = "products")
 @Entity
 class ProductEntity(
     @Id
