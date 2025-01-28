@@ -1,8 +1,6 @@
 package iut.nantes.project.products.entities
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import lombok.AllArgsConstructor
 import lombok.Getter
 import lombok.NoArgsConstructor
@@ -17,9 +15,11 @@ import java.util.*
 class ProductEntity(
     @Id
     @GeneratedValue(generator = "UUID")
-    private val id: UUID,
-    private val name: String,
-    private val description: String,
-    private val price: PriceEntity,
-    private val familyEntity: FamilyEntity
+    private val id: UUID? = null,
+    private val name: String = "",
+    private val description: String = "",
+    @OneToOne(cascade = [(CascadeType.ALL)])
+    private val price: PriceEntity? = null,
+    @OneToOne(cascade = [(CascadeType.ALL)])
+    private val familyEntity: FamilyEntity? = null
 )
