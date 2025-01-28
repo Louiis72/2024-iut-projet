@@ -11,6 +11,7 @@ class FamilyEntity(
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "family_id")
     var id: UUID,
+    @Column(name="name",unique=true)
     var name: String,
     var description: String,
     @OneToMany(mappedBy = "family", cascade = [CascadeType.ALL])

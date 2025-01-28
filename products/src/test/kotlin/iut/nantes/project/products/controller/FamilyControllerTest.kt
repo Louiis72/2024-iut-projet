@@ -64,15 +64,59 @@ class FamilyControllerTest {
             jsonPath("$[0].name") { value("Lits") }  // Vérifie que la première famille a bien le nom "Lits"
             jsonPath("$[1].name") { value("Tables") }  // Vérifie que la deuxième famille a bien le nom "Tables"
         }
-
-
     }
 
-    fun exampleFamily(name:String):String{
+    @Test
+    fun `test 2 familles meme nom`() {
+        val famille1 = exampleFamily("Lits")
+        val famille2 = exampleFamily("Lits")
+
+        mockMvc.post("/api/v1/families") {
+            contentType = APPLICATION_JSON
+            content = famille1
+        }.andExpect {
+            status { isCreated() }
+            content { contentType("application/json") }
+        }
+        mockMvc.post("/api/v1/families") {
+            contentType = APPLICATION_JSON
+            content = famille2
+        }.andExpect {
+            status { isConflict() }
+        }
+    }
+
+    @Test
+    fun `test donnees invalides`() {
+        val famille1 = exampleFamily("li")
+
+        mockMvc.post("/api/v1/families") {
+            contentType = APPLICATION_JSON
+            content = famille1
+        }.andExpect {
+            status { isBadRequest() }
+            content { contentType("application/problem+json") }
+        }
+    }
+
+    @Test
+    fun `test donnees invalides 2`() {
+        val famille1 = exampleFamily("lit","riz")
+
+        mockMvc.post("/api/v1/families") {
+            contentType = APPLICATION_JSON
+            content = famille1
+        }.andExpect {
+            status { isBadRequest() }
+            content { contentType("application/problem+json") }
+        }
+    }
+
+    fun exampleFamily(name:String,description:String = "Description intriguante"):String{
         return """
             {
                 "name": "$name",
-                "description": "Description intriguante"
+                "description": "$description"
             }
         """.trimIndent()
     }
