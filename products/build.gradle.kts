@@ -3,6 +3,8 @@ plugins {
 	kotlin("plugin.spring") version "1.9.25"
 	id("org.springframework.boot") version "3.3.5"
 	id("io.spring.dependency-management") version "1.1.6"
+	val kotlinVersion = "1.9.22"
+	kotlin("plugin.jpa") version kotlinVersion
 }
 
 group = "iut.nantes.project"
@@ -35,12 +37,6 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:4.0.2")
 
 	implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
-
-	compileOnly("org.projectlombok:lombok:1.18.36")
-	annotationProcessor("org.projectlombok:lombok:1.18.36")
-
-	testCompileOnly("org.projectlombok:lombok:1.18.36")
-	testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
 }
 
 kotlin {
