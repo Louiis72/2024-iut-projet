@@ -10,14 +10,11 @@ import java.util.UUID
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-public class Family(
-    private val name: String,
-    private val description: String) {
-
+public class FamilyEntity(
     @Id
     @GeneratedValue(generator = "UUID")
-    private val id: UUID? = null
+    private val id: UUID?,
+    private val name: String,
+    private val description: String) {
 }
