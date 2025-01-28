@@ -1,21 +1,17 @@
 package iut.nantes.project.products.entities
 
-import jakarta.persistence.*
+import jakarta.persistence.Entity
 import lombok.AllArgsConstructor
 import lombok.Getter
 import lombok.NoArgsConstructor
 import lombok.Setter
-import java.util.UUID
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-class FamilyEntity(
-    @Id
-    @GeneratedValue(generator = "UUID")
-    private val id: UUID,
-    private val name: String,
+class PriceEntity(
+    private val amount: Int,
     private val description: String
 )
