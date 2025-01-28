@@ -17,7 +17,6 @@ class ProductEntity(
 )
 
 @Embeddable
-@Table(name = "price")
 data class Price(
     val amount: Double,
     val currency: String
