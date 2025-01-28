@@ -7,16 +7,15 @@ import lombok.NoArgsConstructor
 import lombok.Setter
 import java.util.UUID
 
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class FamilyEntity(
+class FamilyEntity(
     @Id
     @GeneratedValue(generator = "UUID")
-    private val id: UUID?,
-    private val name: String,
-    private val description: String) {
-}
+    private val id: UUID? = null,
+    private val name: String = "",
+    private val description: String = ""
+)
