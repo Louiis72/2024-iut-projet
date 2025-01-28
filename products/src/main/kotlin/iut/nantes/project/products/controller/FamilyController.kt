@@ -1,14 +1,17 @@
 package iut.nantes.project.products.controller
 
 import iut.nantes.project.products.entities.FamilyEntity
+import iut.nantes.project.products.services.FamilyServices
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class FamilyController {
+class FamilyController(val familyServices: FamilyServices) {
 
     @PostMapping("/api/v1/families")
-    fun createFamily() : List<String> {
-        TODO()
+    fun createFamily(@RequestBody family:FamilyDto) : ResponseEntity<FamilyDto> {
+        familyServices.createFamily(family).let { return ResponseEntity.status(HttpStatus.CREATED).body(it) }
     }
 
     @GetMapping("/api/v1/families")

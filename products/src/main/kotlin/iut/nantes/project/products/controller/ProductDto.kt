@@ -11,12 +11,6 @@ data class ProductDto (
     val family:FamilyDto
 )
 
-data class FamilyDto(
-    val id: UUID,
-    val name: String,
-    val description: String
-)
-
 data class PriceDto(
     val amount: String,
     val currency: String
