@@ -10,6 +10,8 @@ import java.util.UUID
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class FamilyEntity(
     @Id
