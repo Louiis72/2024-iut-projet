@@ -13,7 +13,7 @@ class ProductEntity(
     @Embedded
     private val price: Price,
     @OneToOne(cascade = [(CascadeType.ALL)])
-    private val familyEntity: FamilyEntity
+    private val family: FamilyEntity
 )
 
 @Embeddable
