@@ -8,9 +8,8 @@ import java.util.UUID
 @Entity
 class FamilyEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "family_id")
-    var id: UUID,
+    var id: UUID = UUID.randomUUID(),
     @Column(name="name",unique=true)
     var name: String,
     var description: String,

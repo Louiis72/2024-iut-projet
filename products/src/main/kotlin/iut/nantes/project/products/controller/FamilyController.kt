@@ -6,6 +6,7 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 class FamilyController(val familyServices: FamilyServices) {
@@ -22,8 +23,16 @@ class FamilyController(val familyServices: FamilyServices) {
     }
 
     @GetMapping("/api/v1/families/{id}")
-    fun getFamilyById() : List<String> {
-        TODO()
+    fun getFamilyById(@PathVariable id: String) : ResponseEntity<Any> {
+        return try {
+            val uuid = UUID.fromString(id)  // Tentative de conversion en UUID
+            val family = familyServices.getFamilyById(uuid.toString())
+            ResponseEntity.ok(family)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("UUID invalide")
+        } catch (e: NoSuchElementException) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aucune famille trouvée avec cet Id")
+        }
     }
 
     @PutMapping("/api/v1/families/{id}")
