@@ -38,7 +38,7 @@ class FamilyControllerTest {
     }
 
     @Test
-    fun `Creation d'une famille valide`() {
+    fun `CreateFamily correct`() {
         val requestContent = exampleFamily("Lits")
         // Test de création d'une nouvelle famille de produits
         mockMvc.post("/api/v1/families") {
@@ -53,7 +53,7 @@ class FamilyControllerTest {
     }
 
     @Test
-    fun `test findAllFamilies`() {
+    fun `FindAllFamilies rempli`() {
         val famille1 = exampleFamily("Lits")
         val famille2 = exampleFamily("Tables")
 
@@ -76,7 +76,7 @@ class FamilyControllerTest {
     }
 
     @Test
-    fun `2 familles meme nom`() {
+    fun `CreateFamily conflit de nom`() {
         val famille1 = exampleFamily("Lits")
         val famille2 = exampleFamily("Lits")
 
@@ -272,7 +272,7 @@ class FamilyControllerTest {
     }
 
     @Test
-    fun `DeleteFamily produits encore liés`() {
+    fun `DeleteFamily produits encore lies`() {
         val uuid1 = UUID.randomUUID()
         val famille1 = FamilyEntity(uuid1, "Outils", "Description intrigante")
         familyRepository.save(famille1)
