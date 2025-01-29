@@ -1,6 +1,6 @@
 package iut.nantes.project.products.controller
 
-import iut.nantes.project.products.entities.FamilyEntity
+import iut.nantes.project.products.entities.FamilyDto
 import iut.nantes.project.products.services.FamilyServices
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -10,9 +10,8 @@ import java.util.*
 
 @RestController
 class FamilyController(val familyServices: FamilyServices) {
-
     @PostMapping("/api/v1/families")
-    fun createFamily(@Valid @RequestBody family:FamilyDto) : ResponseEntity<FamilyDto> {
+    fun createFamily(@Valid @RequestBody family: FamilyDto) : ResponseEntity<FamilyDto> {
         val createdFamily = familyServices.createFamily(family)
         return ResponseEntity.status(HttpStatus.CREATED).body(createdFamily)
     }

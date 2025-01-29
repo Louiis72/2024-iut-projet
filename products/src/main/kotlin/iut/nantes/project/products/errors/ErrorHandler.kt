@@ -1,5 +1,6 @@
 package iut.nantes.project.products.errors
 
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,4 +16,8 @@ class ErrorHandler: ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(NoSuchElementException::class)
     fun handleConstraintViolation(e: NoSuchElementException) = ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failure: ${e.message}")
+
+    @ExceptionHandler(EntityNotFoundException::class)
+    fun handleConstraintViolation(e: EntityNotFoundException) = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failure: ${e.message}")
+
 }

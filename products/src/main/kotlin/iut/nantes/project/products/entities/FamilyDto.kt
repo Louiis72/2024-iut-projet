@@ -1,4 +1,4 @@
-package iut.nantes.project.products.controller
+package iut.nantes.project.products.entities
 
 import iut.nantes.project.products.entities.FamilyEntity
 import jakarta.validation.constraints.Size

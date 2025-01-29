@@ -1,6 +1,5 @@
 package iut.nantes.project.products.entities
 
-import iut.nantes.project.products.controller.FamilyDto
 import jakarta.persistence.*
 import java.util.UUID
 
@@ -16,7 +15,7 @@ class FamilyEntity(
     @OneToMany(mappedBy = "family", cascade = [CascadeType.ALL])
     var products : List<ProductEntity>? = emptyList()
 ){
-    fun toDto():FamilyDto{
+    fun toDto(): FamilyDto {
         return FamilyDto(this.id,this.name,this.description)
     }
 }

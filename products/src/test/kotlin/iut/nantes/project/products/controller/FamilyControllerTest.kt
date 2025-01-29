@@ -1,12 +1,10 @@
 package iut.nantes.project.products.controller
 
-import com.fasterxml.jackson.databind.BeanDescription
 import iut.nantes.project.products.entities.FamilyEntity
+import iut.nantes.project.products.entities.PriceDto
 import iut.nantes.project.products.entities.ProductEntity
 import iut.nantes.project.products.repositories.FamilyRepository
 import iut.nantes.project.products.repositories.ProductRepository
-import iut.nantes.project.products.services.FamilyServices
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -28,9 +26,6 @@ class FamilyControllerTest {
 
     @Autowired
     lateinit var productRepository: ProductRepository
-
-    @Autowired
-    private lateinit var familyServices: FamilyServices
 
     @BeforeEach
     fun setup() {
@@ -281,7 +276,7 @@ class FamilyControllerTest {
             UUID.randomUUID(),
             "nomProduit",
             "Description produit",
-            PriceDto("100", "EUR"),
+            PriceDto(100, "EUR"),
             famille1
         )
         productRepository.save(productEntity)
