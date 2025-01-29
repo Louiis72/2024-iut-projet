@@ -42,8 +42,16 @@ class FamilyController(val familyServices: FamilyServices) {
     }
 
     @DeleteMapping("/api/v1/families/{id}")
-    fun deleteFamilyById(@PathVariable("id") id: String) : List<String> {
-        TODO()
+    fun deleteFamilyById(@PathVariable("id") id: String) : ResponseEntity<Any> {
+        return try {
+            familyServices.deleteFamily(id)
+            ResponseEntity.noContent().build()
+        } catch (e: NoSuchElementException) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+        } catch (e: IllegalStateException) {
+            ResponseEntity.status(HttpStatus.CONFLICT).body(null)
+        }
+
     }
 
 }

@@ -2,7 +2,9 @@ package iut.nantes.project.products.controller
 
 import com.fasterxml.jackson.databind.BeanDescription
 import iut.nantes.project.products.entities.FamilyEntity
+import iut.nantes.project.products.entities.ProductEntity
 import iut.nantes.project.products.repositories.FamilyRepository
+import iut.nantes.project.products.repositories.ProductRepository
 import iut.nantes.project.products.services.FamilyServices
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -10,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType.APPLICATION_JSON
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
-import org.springframework.test.web.servlet.put
+import org.springframework.test.web.servlet.*
 import java.util.*
 import kotlin.test.Test
 
@@ -26,6 +25,9 @@ class FamilyControllerTest {
 
     @Autowired
     lateinit var familyRepository: FamilyRepository
+
+    @Autowired
+    lateinit var productRepository: ProductRepository
 
     @Autowired
     private lateinit var familyServices: FamilyServices
@@ -108,7 +110,7 @@ class FamilyControllerTest {
 
     @Test
     fun `CreateFamily description invalide`() {
-        val famille1 = exampleFamily("lit","riz")
+        val famille1 = exampleFamily("lit", "riz")
 
         mockMvc.post("/api/v1/families") {
             contentType = APPLICATION_JSON
@@ -154,13 +156,13 @@ class FamilyControllerTest {
         val uuid = UUID.randomUUID()
         val famille = FamilyEntity(uuid, "Outils", "Description intriguante")
         familyRepository.save(famille)
-        mockMvc.get("/api/v1/families/$uuid"){}
+        mockMvc.get("/api/v1/families/$uuid") {}
             .andExpect {
                 status { isOk() }
                 jsonPath("$.name") { value("Outils") }
             }
 
-        mockMvc.put("/api/v1/families/$uuid"){
+        mockMvc.put("/api/v1/families/$uuid") {
             contentType = APPLICATION_JSON
             content = """
                 {
@@ -169,9 +171,9 @@ class FamilyControllerTest {
                 }
             """.trimIndent()
         }.andExpect {
-                status { isOk() }
-                jsonPath("$.name") { value("Maison") }
-            }
+            status { isOk() }
+            jsonPath("$.name") { value("Maison") }
+        }
     }
 
     @Test
@@ -179,13 +181,13 @@ class FamilyControllerTest {
         val uuid = UUID.randomUUID()
         val famille = FamilyEntity(uuid, "Outils", "Description intriguante")
         familyRepository.save(famille)
-        mockMvc.get("/api/v1/families/$uuid"){}
+        mockMvc.get("/api/v1/families/$uuid") {}
             .andExpect {
                 status { isOk() }
                 jsonPath("$.name") { value("Outils") }
             }
 
-        mockMvc.put("/api/v1/families/$uuid"){
+        mockMvc.put("/api/v1/families/$uuid") {
             contentType = APPLICATION_JSON
             content = """
                 {
@@ -209,13 +211,13 @@ class FamilyControllerTest {
         familyRepository.save(famille1)
         familyRepository.save(famille2)
 
-        mockMvc.get("/api/v1/families/$uuid1"){}
+        mockMvc.get("/api/v1/families/$uuid1") {}
             .andExpect {
                 status { isOk() }
                 jsonPath("$.name") { value("Outils") }
             }
 
-        mockMvc.put("/api/v1/families/$uuid1"){
+        mockMvc.put("/api/v1/families/$uuid1") {
             contentType = APPLICATION_JSON
             content = """
                 {
@@ -228,7 +230,74 @@ class FamilyControllerTest {
         }
     }
 
-    fun exampleFamily(name:String,description:String = "Description intriguante"):String{
+    @Test
+    fun `DeleteFamily correct`() {
+        val uuid1 = UUID.randomUUID()
+
+        val famille1 = FamilyEntity(uuid1, "Outils", "Description intriguante")
+
+        familyRepository.save(famille1)
+
+        mockMvc.get("/api/v1/families/$uuid1") {}
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.name") { value("Outils") }
+            }
+
+        mockMvc.delete("/api/v1/families/$uuid1")
+            .andExpect {
+                status { isNoContent() }
+            }
+    }
+
+    @Test
+    fun `DeleteFamily Id inexistant`() {
+        val uuid1 = UUID.randomUUID()
+        val uuid2 = UUID.randomUUID()
+
+        val famille1 = FamilyEntity(uuid1, "Outils", "Description intriguante")
+
+        familyRepository.save(famille1)
+
+        mockMvc.get("/api/v1/families/$uuid1") {}
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.name") { value("Outils") }
+            }
+
+        mockMvc.delete("/api/v1/families/$uuid2")
+            .andExpect {
+                status { isNotFound() }
+            }
+    }
+
+    @Test
+    fun `DeleteFamily produits encore liés`() {
+        val uuid1 = UUID.randomUUID()
+        val famille1 = FamilyEntity(uuid1, "Outils", "Description intrigante")
+        familyRepository.save(famille1)
+
+        val productEntity = ProductEntity(
+            UUID.randomUUID(),
+            "nomProduit",
+            "Description produit",
+            PriceDto("100", "EUR"),
+            famille1
+        )
+        productRepository.save(productEntity)
+
+        mockMvc.get("/api/v1/families/$uuid1") {}
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.name") { value("Outils") }
+            }
+        mockMvc.delete("/api/v1/families/$uuid1")
+            .andExpect {
+                status { isConflict() }
+            }
+    }
+
+    fun exampleFamily(name: String, description: String = "Description intriguante"): String {
         return """
             {
                 "name": "$name",

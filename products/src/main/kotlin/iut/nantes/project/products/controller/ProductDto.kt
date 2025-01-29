@@ -12,6 +12,6 @@ data class ProductDto (
 )
 
 data class PriceDto(
-    val amount: String,
-    val currency: String
+    val amount: String = "",
+    val currency: String = ""
 )

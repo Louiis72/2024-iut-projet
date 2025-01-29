@@ -14,7 +14,7 @@ class FamilyEntity(
     var name: String,
     var description: String,
     @OneToMany(mappedBy = "family", cascade = [CascadeType.ALL])
-    var products : List<ProductEntity>? = null
+    var products : List<ProductEntity>? = emptyList()
 ){
     fun toDto():FamilyDto{
         return FamilyDto(this.id,this.name,this.description)
