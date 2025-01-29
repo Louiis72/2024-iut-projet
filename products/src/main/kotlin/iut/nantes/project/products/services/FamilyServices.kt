@@ -24,7 +24,13 @@ class FamilyServices(val familyRepository:FamilyRepository) {
         val uuid = UUID.fromString(id)
         val result = familyRepository.findById(uuid).orElseThrow { NoSuchElementException("Aucune famille trouvée avec cet Id") }
         return result.toDto()
+    }
 
-
+    fun updateFamily(id:String,family: FamilyDto):FamilyDto{
+        var newFamily = familyRepository.findById(UUID.fromString(id)).orElseThrow { NoSuchElementException("Aucune famille trouvée avec cet Id") }
+        newFamily.name = family.name
+        newFamily.description = family.description
+        familyRepository.save(newFamily)
+        return newFamily.toDto()
     }
 }

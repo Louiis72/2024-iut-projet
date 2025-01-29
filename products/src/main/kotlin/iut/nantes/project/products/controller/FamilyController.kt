@@ -36,8 +36,9 @@ class FamilyController(val familyServices: FamilyServices) {
     }
 
     @PutMapping("/api/v1/families/{id}")
-    fun updateFamilyById(@PathVariable("id") id: String, @RequestBody family: FamilyEntity) : List<String> {
-        TODO()
+    fun updateFamilyById(@Valid @PathVariable("id") id: String,@Valid @RequestBody family: FamilyDto) : ResponseEntity<FamilyDto> {
+        val modifiedFamily = familyServices.updateFamily(id,family)
+        return ResponseEntity.status(HttpStatus.OK).body(modifiedFamily)
     }
 
     @DeleteMapping("/api/v1/families/{id}")

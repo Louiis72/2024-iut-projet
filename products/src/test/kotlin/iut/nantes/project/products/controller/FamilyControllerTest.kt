@@ -13,6 +13,7 @@ import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 import java.util.*
 import kotlin.test.Test
 
@@ -148,7 +149,84 @@ class FamilyControllerTest {
             }
     }
 
+    @Test
+    fun `UpdateFamily correct`() {
+        val uuid = UUID.randomUUID()
+        val famille = FamilyEntity(uuid, "Outils", "Description intriguante")
+        familyRepository.save(famille)
+        mockMvc.get("/api/v1/families/$uuid"){}
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.name") { value("Outils") }
+            }
 
+        mockMvc.put("/api/v1/families/$uuid"){
+            contentType = APPLICATION_JSON
+            content = """
+                {
+                "name":"Maison",
+                "description":"Description de maison"
+                }
+            """.trimIndent()
+        }.andExpect {
+                status { isOk() }
+                jsonPath("$.name") { value("Maison") }
+            }
+    }
+
+    @Test
+    fun `UpdateFamily incorrect`() {
+        val uuid = UUID.randomUUID()
+        val famille = FamilyEntity(uuid, "Outils", "Description intriguante")
+        familyRepository.save(famille)
+        mockMvc.get("/api/v1/families/$uuid"){}
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.name") { value("Outils") }
+            }
+
+        mockMvc.put("/api/v1/families/$uuid"){
+            contentType = APPLICATION_JSON
+            content = """
+                {
+                "name":"Ma",
+                "description":"Description de maison"
+                }
+            """.trimIndent()
+        }.andExpect {
+            status { isBadRequest() }
+        }
+    }
+
+    @Test
+    fun `UpdateFamily conflit de nom`() {
+        val uuid1 = UUID.randomUUID()
+        val uuid2 = UUID.randomUUID()
+
+        val famille1 = FamilyEntity(uuid1, "Outils", "Description intriguante")
+        val famille2 = FamilyEntity(uuid2, "Maison", "Description intriguante")
+
+        familyRepository.save(famille1)
+        familyRepository.save(famille2)
+
+        mockMvc.get("/api/v1/families/$uuid1"){}
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.name") { value("Outils") }
+            }
+
+        mockMvc.put("/api/v1/families/$uuid1"){
+            contentType = APPLICATION_JSON
+            content = """
+                {
+                "name":"Maison",
+                "description":"Description de maison"
+                }
+            """.trimIndent()
+        }.andExpect {
+            status { isConflict() }
+        }
+    }
 
     fun exampleFamily(name:String,description:String = "Description intriguante"):String{
         return """
