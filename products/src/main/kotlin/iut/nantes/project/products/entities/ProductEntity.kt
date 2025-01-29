@@ -7,7 +7,6 @@ import java.util.*
 @Entity
 class ProductEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "product_id")
     var id: UUID = UUID.randomUUID(),
     var name: String,

@@ -17,8 +17,8 @@ class FamilyController(val familyServices: FamilyServices) {
     }
 
     @GetMapping("/api/v1/families")
-    fun finAllFamilies() : List<FamilyDto> {
-        return familyServices.getFamilies()
+    fun findAllFamilies() : ResponseEntity<List<FamilyDto>> {
+        return ResponseEntity.status(HttpStatus.OK).body(familyServices.getFamilies())
     }
 
     @GetMapping("/api/v1/families/{id}")
