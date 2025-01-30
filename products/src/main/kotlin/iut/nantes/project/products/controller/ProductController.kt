@@ -11,21 +11,22 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
+@RequestMapping("/api/v1/products")
 class ProductController(val productServices: ProductServices) {
-    @PostMapping("/api/v1/products")
+    @PostMapping
     fun createProduct(@Valid @RequestBody product:ProductDto) : ResponseEntity<ProductDto>{
         val createdProduct = productServices.createProduct(product)
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct)
 
     }
 
-    @GetMapping("/api/v1/products")
+    @GetMapping
     fun findAllProductsd() : ResponseEntity<List<ProductDto>> {
         return ResponseEntity.status(HttpStatus.OK).body(productServices.findAllProducts())
 
     }
 
-    @GetMapping("/api/v1/products/{id}")
+    @GetMapping("/{id}")
     fun findProductById(@PathVariable id: String) : ResponseEntity<Any> {
         return try {
             val uuid = UUID.fromString(id)  // Tentative de conversion en UUID
@@ -38,13 +39,13 @@ class ProductController(val productServices: ProductServices) {
         }
     }
 
-    @PutMapping("/api/v1/products/{id}")
+    @PutMapping("/{id}")
     fun updateProductById(@Valid @PathVariable("id") id: String,@Valid @RequestBody product: ProductDto) : ResponseEntity<ProductDto> {
         val modifiedProduct = productServices.updateProduct(id,product)
         return ResponseEntity.status(HttpStatus.OK).body(modifiedProduct)
     }
 
-    @DeleteMapping("/api/v1/products/{id}")
+    @DeleteMapping("/{id}")
     fun deleteFamilyById(@PathVariable("id") id: String) : ResponseEntity<Any> {
         return try {
             val uuid = UUID.fromString(id)
