@@ -3,7 +3,7 @@ package iut.nantes.project.stores.dto
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 
-data class AdressDto (
+data class AddressDto (
     @field:Size(min = 5, max = 50, message = "La rue doit faire entre 5 et 50 caractères.")
     val street: String,
 

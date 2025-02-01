@@ -1,6 +1,6 @@
 package iut.nantes.project.stores.entities
 
-import iut.nantes.project.stores.dto.AdressDto
+import iut.nantes.project.stores.dto.AddressDto
 import iut.nantes.project.stores.dto.ContactDto
 import jakarta.persistence.*
 
@@ -13,9 +13,9 @@ class ContactEntity(
     val email: String,
     val phone: String,
     @Embedded
-    val address: AdressDto
+    val address: AddressDto
 ){
-    constructor() : this(0,"","",AdressDto()) {
+    constructor() : this(0,"","",AddressDto()) {
 
     }
 

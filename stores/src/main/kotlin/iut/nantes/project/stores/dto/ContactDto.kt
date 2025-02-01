@@ -10,7 +10,7 @@ data class ContactDto (
     val email: String,
     @field:Pattern(regexp = "\\d{10}", message = "Le téléphone doit avoir 10 chiffres.")
     val phone: String,
-    val address: AdressDto
+    val address: AddressDto
 ){
     fun toEntity():ContactEntity{
         return ContactEntity(this.id,this.email,this.phone,this.address)
