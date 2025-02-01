@@ -10,10 +10,10 @@ class ContactEntity(
     @Id @GeneratedValue
     @Column(name = "contact_id")
     val id: Long? = null,
-    val email: String,
-    val phone: String,
+    var email: String,
+    var phone: String,
     @Embedded
-    val address: AddressDto
+    var address: AddressDto
 ){
     constructor() : this(0,"","",AddressDto()) {
 

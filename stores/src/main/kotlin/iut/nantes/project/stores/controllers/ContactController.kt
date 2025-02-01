@@ -36,6 +36,24 @@ class ContactController(val contactServices: ContactServices) {
         } catch (e: NoSuchElementException) {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aucun contact trouvée avec cet Id")
         }
+    }
+
+    @PutMapping("/{id}")
+    fun updateContactById(@Valid @PathVariable("id") id: String,@Valid @RequestBody contact: ContactDto):ResponseEntity<ContactDto>{
+        val modifiedContact = contactServices.updateContactById(id,contact)
+        return ResponseEntity.status(HttpStatus.OK).body(modifiedContact)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteContactById(@Valid @PathVariable("id") id: String):ResponseEntity<ContactDto>{
+        return try {
+            contactServices.deleteContactById(id)
+            ResponseEntity.noContent().build()
+        } catch (e: NoSuchElementException) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+        } catch (e: IllegalStateException) {
+            ResponseEntity.status(HttpStatus.CONFLICT).body(null)
+        }
 
     }
 }

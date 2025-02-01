@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import iut.nantes.project.stores.dto.ContactDto
 import iut.nantes.project.stores.repository.ContactRepository
 import org.springframework.stereotype.Service
-import java.util.NoSuchElementException
+import java.util.*
 
 @Service
 class ContactServices(val contactRepository: ContactRepository) {
@@ -24,5 +24,26 @@ class ContactServices(val contactRepository: ContactRepository) {
         print(jacksonObjectMapper().writeValueAsString(contactRepository.findAll()[0]) )
         val contact = contactRepository.findById(id).orElseThrow { NoSuchElementException("Aucun contact trouvée avec cet Id") }
         return contact.toDto()
+    }
+
+    fun updateContactById(id:String,contact:ContactDto):ContactDto{
+        print(jacksonObjectMapper().writeValueAsString(contactRepository.findAll()[0]) )
+
+        val idLong = id.toLong()
+        val newContact = contactRepository.findById(idLong).orElseThrow { NoSuchElementException("Aucun contact trouvée avec cet Id") }
+        newContact.email = contact.email
+        newContact.address = contact.address
+        newContact.phone = contact.phone
+        return newContact.toDto()
+    }
+
+    fun deleteContactById(id:String){
+        //print(jacksonObjectMapper().writeValueAsString(contactRepository.findAll()[0]) )
+
+        val idLong = id.toLong()
+        val contact = contactRepository.findById(idLong).orElseThrow {
+            NoSuchElementException("Aucun contact trouvé avec cet Id")
+        }
+        contactRepository.delete(contact)
     }
 }

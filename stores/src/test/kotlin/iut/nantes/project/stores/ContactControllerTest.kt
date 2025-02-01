@@ -6,15 +6,16 @@ import iut.nantes.project.stores.dto.ContactDto
 import iut.nantes.project.stores.entities.ContactEntity
 import org.springframework.http.MediaType.APPLICATION_JSON
 import iut.nantes.project.stores.repository.ContactRepository
+import iut.nantes.project.stores.services.ContactServices
 import jakarta.transaction.Transactional
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.*
+import java.util.*
 
 
 @SpringBootTest
@@ -26,6 +27,9 @@ class ContactControllerTest {
 
     @Autowired
     lateinit var contactRepository: ContactRepository
+
+    @Autowired
+    lateinit var contactServices: ContactServices
 
     @BeforeEach
     fun setup() {
@@ -105,8 +109,8 @@ class ContactControllerTest {
         val id : Long = 3
         val contact1 = ContactEntity(id,"louis.villatte@gmail.com","0786351941",AddressDto("3 rue","Nantes","44000"))
         contactRepository.save(contact1)
-        // Je choisis 5 car c'est le 5eme contact cree donc il a 5 comme Id. Peut être à revoir ?
-        mockMvc.get("/api/v1/contacts/5")
+        // Je choisis 8 car c'est le 5eme contact cree donc il a 8 comme Id. Peut être à revoir ?
+        mockMvc.get("/api/v1/contacts/8")
             .andExpect {
                 status { isOk() }  // Vérifie que le contact est trouvé
                 content { contentType("application/json") }
@@ -130,6 +134,7 @@ class ContactControllerTest {
                 status { isNotFound() }  // Vérifie que le contact n'est trouvé
             }
     }
+
     @Test
     @Transactional
     fun `FindContactById id invalide`() {
@@ -139,6 +144,58 @@ class ContactControllerTest {
             }
     }
 
+    @Test
+    @Transactional
+    fun `UpdateContact correct`() {
+        val contact = exampleContact("louis.villate@gmail.com")
+        contactServices.createContact(contact)
+
+        val newContact = exampleContact("louis.villatte@laposte.net")
+
+        mockMvc.put("/api/v1/contacts/1") { // Peut être à changer, l'ID est généré selon les anciens tests ??
+            contentType = APPLICATION_JSON
+            content = jacksonObjectMapper().writeValueAsString(newContact) // Informations du nouveau contact en body
+        }.andExpect {
+            status { isOk() }
+        }
+    }
+
+    @Test
+    @Transactional
+    fun `UpdateContact incorrect`() {
+        val contact = exampleContact("louis.villatte@laposte.net")
+        contactServices.createContact(contact)
+
+        val newContact = exampleContact("lo")
+
+        mockMvc.put("/api/v1/contacts/2") {
+            contentType = APPLICATION_JSON
+            content = jacksonObjectMapper().writeValueAsString(newContact) // Informations du nouveau contact en body
+        }.andExpect {
+            status { isBadRequest() }
+        }
+    }
+
+    @Test
+    @Transactional
+    fun `deleteContact correct`() {
+        val contact = exampleContact("louis.villatte@laposte.net")
+        contactServices.createContact(contact)
+
+        mockMvc.delete("/api/v1/contacts/3")
+            .andExpect {
+            status { isNoContent() }
+        }
+    }
+
+    @Test
+    @Transactional
+    fun `deleteContact incorrect`() {
+        mockMvc.delete("/api/v1/contacts/INVALID")
+            .andExpect {
+                status { isBadRequest() }
+            }
+    }
     fun exampleContact(mail:String,phone:String = "0786351941"): ContactDto {
         return ContactDto(0L, mail,phone, AddressDto("rue Dupont","Nantes","44000"))
     }
