@@ -13,20 +13,20 @@ import java.util.*
 @RequestMapping("api/v1/contacts")
 class ContactController(val contactServices: ContactServices) {
     @PostMapping
-    fun createContact(@RequestBody @Valid contactDto: ContactDto):ResponseEntity<ContactDto>{
+    fun createContact(@RequestBody @Valid contactDto: ContactDto): ResponseEntity<ContactDto> {
         val createdContact = contactServices.createContact(contactDto)
         return ResponseEntity.status(HttpStatus.CREATED).body(createdContact)
     }
 
     @GetMapping
-    fun findContact(@RequestBody city: String?):ResponseEntity<List<ContactDto>>{
+    fun findContact(@RequestBody city: String?): ResponseEntity<List<ContactDto>> {
         val contacts = contactServices.findAllContacts(city)
         println(jacksonObjectMapper().writeValueAsString(contacts))
         return ResponseEntity.status(HttpStatus.OK).body(contacts)
     }
 
     @GetMapping("/{id}")
-    fun findContactById(@PathVariable id:String):ResponseEntity<Any>{
+    fun findContactById(@PathVariable id: String): ResponseEntity<Any> {
         return try {
             var idContact = id.toLong()
             val contact = contactServices.findContactById(idContact)
@@ -39,13 +39,16 @@ class ContactController(val contactServices: ContactServices) {
     }
 
     @PutMapping("/{id}")
-    fun updateContactById(@Valid @PathVariable("id") id: String,@Valid @RequestBody contact: ContactDto):ResponseEntity<ContactDto>{
-        val modifiedContact = contactServices.updateContactById(id,contact)
+    fun updateContactById(
+        @Valid @PathVariable("id") id: String,
+        @Valid @RequestBody contact: ContactDto
+    ): ResponseEntity<ContactDto> {
+        val modifiedContact = contactServices.updateContactById(id, contact)
         return ResponseEntity.status(HttpStatus.OK).body(modifiedContact)
     }
 
     @DeleteMapping("/{id}")
-    fun deleteContactById(@Valid @PathVariable("id") id: String):ResponseEntity<ContactDto>{
+    fun deleteContactById(@Valid @PathVariable("id") id: String): ResponseEntity<ContactDto> {
         return try {
             contactServices.deleteContactById(id)
             ResponseEntity.noContent().build()
@@ -54,6 +57,5 @@ class ContactController(val contactServices: ContactServices) {
         } catch (e: IllegalStateException) {
             ResponseEntity.status(HttpStatus.CONFLICT).body(null)
         }
-
     }
 }

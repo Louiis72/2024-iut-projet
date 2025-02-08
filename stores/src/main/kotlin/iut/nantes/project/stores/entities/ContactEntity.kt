@@ -8,8 +8,8 @@ import jakarta.persistence.*
 @Table(name = "contacts")
 class ContactEntity(
     @Id @GeneratedValue
-    @Column(name = "contact_id")
-    val id: Long? = null,
+    @Column(name = "id_contact")
+    var id: Long? = null,
     var email: String,
     var phone: String,
     @Embedded
@@ -20,6 +20,6 @@ class ContactEntity(
     }
 
     fun toDto():ContactDto{
-        return ContactDto(this.id,this.email,this.phone,this.address)
+        return ContactDto(this.id!!,this.email,this.phone,this.address)
     }
 }

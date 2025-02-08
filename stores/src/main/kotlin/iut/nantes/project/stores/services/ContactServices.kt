@@ -21,20 +21,20 @@ class ContactServices(val contactRepository: ContactRepository) {
     }
 
     fun findContactById(id:Long):ContactDto{
-        print(jacksonObjectMapper().writeValueAsString(contactRepository.findAll()[0]) )
+        //print(jacksonObjectMapper().writeValueAsString(contactRepository.findAll()[0]) )
         val contact = contactRepository.findById(id).orElseThrow { NoSuchElementException("Aucun contact trouvée avec cet Id") }
         return contact.toDto()
     }
 
     fun updateContactById(id:String,contact:ContactDto):ContactDto{
-        print(jacksonObjectMapper().writeValueAsString(contactRepository.findAll()[0]) )
+        //print(jacksonObjectMapper().writeValueAsString(contactRepository.findAll()[0]) )
 
         val idLong = id.toLong()
         val newContact = contactRepository.findById(idLong).orElseThrow { NoSuchElementException("Aucun contact trouvée avec cet Id") }
         newContact.email = contact.email
         newContact.address = contact.address
         newContact.phone = contact.phone
-        return newContact.toDto()
+        return contactRepository.save(newContact).toDto()
     }
 
     fun deleteContactById(id:String){
