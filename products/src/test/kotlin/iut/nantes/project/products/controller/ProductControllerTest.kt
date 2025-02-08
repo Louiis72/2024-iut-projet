@@ -23,7 +23,7 @@ class ProductControllerTest {
     @Autowired
     lateinit var mockMvc: MockMvc
 
-    val uuidFamily : UUID = UUID.randomUUID()
+    val uuidFamily: UUID = UUID.randomUUID()
 
     @Autowired
     lateinit var familyRepository: FamilyRepository

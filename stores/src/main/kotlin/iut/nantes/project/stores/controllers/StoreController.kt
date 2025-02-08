@@ -1,7 +1,6 @@
 package iut.nantes.project.stores.controllers
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import iut.nantes.project.stores.dto.ContactDto
+import iut.nantes.project.stores.dto.ProductDto
 import iut.nantes.project.stores.dto.StoreDto
 import iut.nantes.project.stores.services.StoreServices
 import jakarta.validation.Valid
@@ -29,7 +28,7 @@ class StoreController(val storeServices: StoreServices) {
     @GetMapping("/{id}")
     fun findStoreById(@PathVariable id: String): ResponseEntity<Any> {
         return try {
-            var idStore = id.toLong()
+            val idStore = id.toLong()
             val store = storeServices.findStoreById(idStore)
             ResponseEntity.ok(store)
         } catch (e: IllegalArgumentException) {
@@ -57,6 +56,51 @@ class StoreController(val storeServices: StoreServices) {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
         } catch (e: IllegalStateException) {
             ResponseEntity.status(HttpStatus.CONFLICT).body(null)
+        }
+    }
+
+    @PostMapping("/{storeId}/products/{productId}/add")
+    fun addProductQuantity(
+        @Valid @PathVariable storeId: String,
+        @Valid @PathVariable productId: String,
+        @RequestBody quantity: String
+    ): ResponseEntity<ProductDto> {
+        var productQuantity = quantity.toIntOrNull()
+        if (productQuantity == null) {
+            productQuantity = 1
+        }
+        val product = storeServices.addProductQuantity(storeId, productId, productQuantity)
+        return ResponseEntity.status(HttpStatus.OK).body(product)
+    }
+
+    @PostMapping("/{storeId}/products/{productId}/remove")
+    fun removeProductQuantity(
+        @Valid @PathVariable storeId: String,
+        @Valid @PathVariable productId: String,
+        @RequestBody quantity: String
+    ): ResponseEntity<ProductDto> {
+        var productQuantity = quantity.toIntOrNull()
+        if (productQuantity == null) {
+            productQuantity = 1
+        }
+        val product = storeServices.removeProductQuantity(storeId, productId, productQuantity)
+        return ResponseEntity.status(HttpStatus.OK).body(product)
+    }
+
+    @DeleteMapping("/{storeId}/products")
+    fun removeProductsFromStore(
+        @PathVariable storeId: String,
+        @RequestBody productIds: List<String>
+    ): ResponseEntity<Void> {
+        if (productIds.isEmpty() || productIds.distinct().size != productIds.size) {
+            return ResponseEntity.badRequest().build()
+        }
+
+        return try {
+            storeServices.removeProductsFromStore(storeId, productIds)
+            ResponseEntity.noContent().build()
+        } catch (e: NoSuchElementException) {
+            ResponseEntity.notFound().build()
         }
     }
 }

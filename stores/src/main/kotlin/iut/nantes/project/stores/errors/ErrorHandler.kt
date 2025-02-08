@@ -11,17 +11,21 @@ import java.lang.NumberFormatException
 import java.util.NoSuchElementException
 
 @ControllerAdvice
-class ErrorHandler: ResponseEntityExceptionHandler() {
+class ErrorHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(DataIntegrityViolationException::class)
-    fun handleConstraintViolation(e: DataIntegrityViolationException) = ResponseEntity.status(HttpStatus.CONFLICT).body("Failure: ${e.message}")
+    fun handleConstraintViolation(e: DataIntegrityViolationException) =
+        ResponseEntity.status(HttpStatus.CONFLICT).body("Failure: ${e.message}")
 
     @ExceptionHandler(NoSuchElementException::class)
-    fun handleConstraintViolation(e: NoSuchElementException) = ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failure: ${e.message}")
+    fun handleConstraintViolation(e: NoSuchElementException) =
+        ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failure: ${e.message}")
 
     @ExceptionHandler(EntityNotFoundException::class)
-    fun handleConstraintViolation(e: EntityNotFoundException) = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failure: ${e.message}")
+    fun handleConstraintViolation(e: EntityNotFoundException) =
+        ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failure: ${e.message}")
 
     @ExceptionHandler(NumberFormatException::class)
-    fun handleConstraintViolation(e: NumberFormatException) = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failure: ${e.message}")
+    fun handleConstraintViolation(e: NumberFormatException) =
+        ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failure: ${e.message}")
 
 }

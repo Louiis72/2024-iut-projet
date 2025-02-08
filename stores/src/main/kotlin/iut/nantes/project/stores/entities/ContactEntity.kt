@@ -14,12 +14,12 @@ class ContactEntity(
     var phone: String,
     @Embedded
     var address: AddressDto
-){
-    constructor() : this(0,"","",AddressDto()) {
+) {
+    constructor() : this(0, "", "", AddressDto()) {
 
     }
 
-    fun toDto():ContactDto{
-        return ContactDto(this.id!!,this.email,this.phone,this.address)
+    fun toDto(): ContactDto {
+        return ContactDto(this.id!!, this.email, this.phone, this.address)
     }
 }

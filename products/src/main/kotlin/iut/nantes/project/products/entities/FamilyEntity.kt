@@ -9,13 +9,13 @@ class FamilyEntity(
     @Id
     @Column(name = "family_id")
     var id: UUID = UUID.randomUUID(),
-    @Column(name="name",unique=true)
+    @Column(name = "name", unique = true)
     var name: String,
     var description: String,
     @OneToMany(mappedBy = "family", cascade = [CascadeType.ALL])
-    var products : List<ProductEntity>? = emptyList()
-){
+    var products: List<ProductEntity>? = emptyList()
+) {
     fun toDto(): FamilyDto {
-        return FamilyDto(this.id,this.name,this.description)
+        return FamilyDto(this.id, this.name, this.description)
     }
 }

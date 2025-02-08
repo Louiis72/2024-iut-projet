@@ -56,7 +56,7 @@ class ContactControllerTest {
     @Transactional
     fun `CreateContact incorrect`() {
         // Création d'un contact avec un numéro de téléphone invalide
-        val contact = exampleContact("louis.villate@gmail.com","NUMERO INCORRECT")
+        val contact = exampleContact("louis.villate@gmail.com", "NUMERO INCORRECT")
         mockMvc.post("/api/v1/contacts") {
             contentType = APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(contact)
@@ -78,10 +78,10 @@ class ContactControllerTest {
 
         mockMvc.get("/api/v1/contacts")
             .andExpect {
-            status { isOk() }  // Vérifie que le contact est trouvé
-            content { contentType("application/json") }
-            jsonPath("$[0].email") { value("louis.villate@gmail.com") }  // Vérifier que le mail est correct
-        }
+                status { isOk() }  // Vérifie que le contact est trouvé
+                content { contentType("application/json") }
+                jsonPath("$[0].email") { value("louis.villate@gmail.com") }  // Vérifier que le mail est correct
+            }
     }
 
     @Test
@@ -106,8 +106,9 @@ class ContactControllerTest {
     @Test
     @Transactional
     fun `FindContactById existant`() {
-        val id : Long = 3
-        val contact1 = ContactEntity(id,"louis.villatte@gmail.com","0786351941",AddressDto("3 rue","Nantes","44000"))
+        val id: Long = 3
+        val contact1 =
+            ContactEntity(id, "louis.villatte@gmail.com", "0786351941", AddressDto("3 rue", "Nantes", "44000"))
         contactRepository.save(contact1)
         // Je choisis 8 car c'est le 5eme contact cree donc il a 8 comme Id. Peut être à revoir ?
         mockMvc.get("/api/v1/contacts/8")
@@ -184,8 +185,8 @@ class ContactControllerTest {
 
         mockMvc.delete("/api/v1/contacts/3")
             .andExpect {
-            status { isNoContent() }
-        }
+                status { isNoContent() }
+            }
     }
 
     @Test
@@ -196,7 +197,8 @@ class ContactControllerTest {
                 status { isBadRequest() }
             }
     }
-    fun exampleContact(mail:String,phone:String = "0786351941"): ContactDto {
-        return ContactDto(0L, mail,phone, AddressDto("rue Dupont","Nantes","44000"))
+
+    fun exampleContact(mail: String, phone: String = "0786351941"): ContactDto {
+        return ContactDto(0L, mail, phone, AddressDto("rue Dupont", "Nantes", "44000"))
     }
 }

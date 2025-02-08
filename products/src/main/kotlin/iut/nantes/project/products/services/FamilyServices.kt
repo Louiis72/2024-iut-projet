@@ -18,7 +18,8 @@ class FamilyServices(val familyRepository: FamilyRepository) {
 
     fun getFamilyById(id: String): FamilyDto {
         val uuid = UUID.fromString(id)
-        val result = familyRepository.findById(uuid).orElseThrow { NoSuchElementException("Aucune famille trouvée avec cet Id") }
+        val result =
+            familyRepository.findById(uuid).orElseThrow { NoSuchElementException("Aucune famille trouvée avec cet Id") }
         return result.toDto()
     }
 

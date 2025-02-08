@@ -10,14 +10,14 @@ class ProductEntity(
     @Column(name = "product_id")
     var id: UUID = UUID.randomUUID(),
     var name: String,
-    var description : String?,
+    var description: String?,
     @Embedded
     var price: PriceDto,
     @ManyToOne
     @JoinColumn(name = "family_id", nullable = false)
     var family: FamilyEntity
-){
+) {
     fun toDto(): ProductDto {
-        return ProductDto(this.id,this.name,this.description,this.price,this.family.toDto())
+        return ProductDto(this.id, this.name, this.description, this.price, this.family.toDto())
     }
 }

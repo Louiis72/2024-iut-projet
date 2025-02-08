@@ -5,19 +5,20 @@ import iut.nantes.project.products.repositories.ProductRepository
 import java.util.*
 
 class ProductServices(val productRepository: ProductRepository) {
-    fun createProduct(product:ProductDto):ProductDto{
+    fun createProduct(product: ProductDto): ProductDto {
         val productEntity = product.toEntity()
         val savedFamily = productRepository.save(productEntity)
         return savedFamily.toDto()
     }
 
-    fun findAllProducts():List<ProductDto>{
+    fun findAllProducts(): List<ProductDto> {
         return productRepository.findAll().map { it.toDto() }.toList()
     }
 
-    fun getProductById(id:String):ProductDto{
+    fun getProductById(id: String): ProductDto {
         val uuid = UUID.fromString(id)
-        val result = productRepository.findById(uuid).orElseThrow { NoSuchElementException("Aucun produit trouvé avec cet Id") }
+        val result =
+            productRepository.findById(uuid).orElseThrow { NoSuchElementException("Aucun produit trouvé avec cet Id") }
         return result.toDto()
     }
 
@@ -33,7 +34,7 @@ class ProductServices(val productRepository: ProductRepository) {
         return newProduct.toDto()
     }
 
-    fun deleteProduct(id:String){
+    fun deleteProduct(id: String) {
         val uuid = UUID.fromString(id)
         val product = productRepository.findById(uuid).orElseThrow {
             NoSuchElementException("Aucun produit trouvé avec cet Id")

@@ -12,18 +12,18 @@ import java.util.*
 @RequestMapping("/api/v1/families")
 class FamilyController(val familyServices: FamilyServices) {
     @PostMapping
-    fun createFamily(@Valid @RequestBody family: FamilyDto) : ResponseEntity<FamilyDto> {
+    fun createFamily(@Valid @RequestBody family: FamilyDto): ResponseEntity<FamilyDto> {
         val createdFamily = familyServices.createFamily(family)
         return ResponseEntity.status(HttpStatus.CREATED).body(createdFamily)
     }
 
     @GetMapping
-    fun findAllFamilies() : ResponseEntity<List<FamilyDto>> {
+    fun findAllFamilies(): ResponseEntity<List<FamilyDto>> {
         return ResponseEntity.status(HttpStatus.OK).body(familyServices.getFamilies())
     }
 
     @GetMapping("/{id}")
-    fun getFamilyById(@PathVariable id: String) : ResponseEntity<Any> {
+    fun getFamilyById(@PathVariable id: String): ResponseEntity<Any> {
         return try {
             val uuid = UUID.fromString(id)  // Tentative de conversion en UUID
             val family = familyServices.getFamilyById(uuid.toString())
@@ -36,13 +36,16 @@ class FamilyController(val familyServices: FamilyServices) {
     }
 
     @PutMapping("/{id}")
-    fun updateFamilyById(@Valid @PathVariable("id") id: String,@Valid @RequestBody family: FamilyDto) : ResponseEntity<FamilyDto> {
-        val modifiedFamily = familyServices.updateFamily(id,family)
+    fun updateFamilyById(
+        @Valid @PathVariable("id") id: String,
+        @Valid @RequestBody family: FamilyDto
+    ): ResponseEntity<FamilyDto> {
+        val modifiedFamily = familyServices.updateFamily(id, family)
         return ResponseEntity.status(HttpStatus.OK).body(modifiedFamily)
     }
 
     @DeleteMapping("/{id}")
-    fun deleteFamilyById(@PathVariable("id") id: String) : ResponseEntity<Any> {
+    fun deleteFamilyById(@PathVariable("id") id: String): ResponseEntity<Any> {
         return try {
             familyServices.deleteFamily(id)
             ResponseEntity.noContent().build()
