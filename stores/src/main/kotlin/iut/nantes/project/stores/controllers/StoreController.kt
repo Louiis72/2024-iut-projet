@@ -48,7 +48,7 @@ class StoreController(val storeServices: StoreServices) {
         return ResponseEntity.status(HttpStatus.OK).body(modifiedStore)
     }
 
-    @DeleteMapping("/{id")
+    @DeleteMapping("/{id}")
     fun deleteStoreById(@Valid @PathVariable("id") id: String) {
         try {
             storeServices.deleteStoreById(id)
